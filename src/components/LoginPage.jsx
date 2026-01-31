@@ -1,45 +1,48 @@
-import { useState } from "react";
+import { useFormStatus } from "react-dom";
+import { Link, redirect, Router, useNavigate } from "react-router";
 
 
-function LoginPage() {
-    const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading,setLoading] =useState(false);
+export default function LoginPage() {
+  //to be used to navigate to next page on successful login
+const navigation=useNavigate();
 
-   async function handleSubmit(){
+   async function handleSubmit(formData){
 
-   setLoading(true)
-   if(password=='' || username==''){
-    setUsername('')
-    setPassword('')
-    alert('Enter all details')
-   }
-   else{
-   {loading && (
-  <div className="overlay">
-    <div className="spinner"></div>
-  </div>
-)}
+   const user = formData.get("username");
+    const pass = formData.get("password");
+
+//    {loading && (
+//   <div className="overlay">
+//     <div className="spinner"></div>
+//   </div>
+// )}
   //  code for API
- 
-  const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
+ await new Promise((res) => setTimeout(res, 5000));
+  // const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ user, pass }),
+  //     });
       
-  if(response){
-    // go to next page
-    console.log("helo")
+  // if(response){
+  //   // go to next page
+  //   console.log("helo")
     
-    setPassword('')
+  //   setPassword('')
+  // }
+  // else{
+  //   alert("Login Failed")
+   
+  //   }
+  console.log("clicked here");
+  const loginIn=true;
+    
+  if(loginIn){
+    navigation("start")
   }
-  else{
-    alert("Login Failed")
-    setLoading(false)
-    }
-    }
-  }
+  // nav link ot link for signup
+    
+   }
   return (
  
     <>
@@ -57,25 +60,27 @@ function LoginPage() {
         <h2 className="text-3xl font-bold text-gray-800 mb-2">Login</h2>
           <p className="text-gray-500 mb-6">Sign in to your account</p>
           
-          {/* <form onClick={handleSubmit}> */}
+          <form action={handleSubmit}>
             <div>
-                <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" type="email" placeholder="Email" required value={username} onChange={(e)=>setUsername(e.target.value)}/>
+                <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" type="email" placeholder="Email" required name="username"/>
               
             </div>
             <div>
-                  <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5" type="password" placeholder="Password" required value={password} onChange={(e)=>setPassword(e.target.value)}></input>
+                  <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5" type="password" placeholder="Password" required name="password"></input>
             </div>
             <div>
-                <button type="submit" className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none" onClick={handleSubmit} disabled={loading}>
+              <LoginButton></LoginButton>
+                {/* <LoginButton type="submit" className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none" onClick={handleSubmit} disabled={loading}>
                     
                     <span>Sign In</span>
-                </button>
+                </button> */}
             </div>
             <div style={{marginTop:"20px"}}>
                 <p>Already have an account?</p>
-                <a href="www.google.com" className="font-bold">Sign Up</a>
+                <Link to="Register" className="font-bold">Sign Up</Link>
+
             </div>
-          {/* </form> */}
+          </form>
         </div>
         </div>
         </div>
@@ -83,4 +88,19 @@ function LoginPage() {
     </>
   );
 }
-export default LoginPage;
+function LoginButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <>
+      <button
+        type="submit"
+        className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+        disabled={pending}
+      >
+        {pending ? "Logging In" : "LogIn"}
+      </button>
+    </>
+  );
+}
+

@@ -2,26 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.spinner {
-  width: 18px;
-  height: 18px;
-  border: 3px solid #ddd;
-  border-top: 3px solid #333;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: auto;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+div#root{
+padding: 0rem;
+max-width: none;
 }
